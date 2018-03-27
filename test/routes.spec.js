@@ -58,4 +58,39 @@ describe('API Routes', () => {
       });
     });
   });
+
+  describe('POST /api/v1/marijuana_incident/', () => {
+    it('add new police district', () => {
+      return chai.request(server)
+      .post('/api/v1/marijuana_incident/')
+      .send({
+        //data
+      })
+      .then(response => {
+        response.should.have.status(201);
+        response.body.should.be.a('object');
+        //response.body.should.have.property(propertyname);
+        //response.body.propertyname.should.equal('');
+      })
+      .catch(err => {
+        throw err;
+      });
+    });
+
+    it('should not create a record with missing data', () => {
+      return chai.request(server)
+      .post('/api/v1/marijuana_incident/')
+      .send({
+        //data
+      })
+      .then(response => {
+        response.should.have.status(422);
+        //response.body.error.should.equal(whatever we set response error to)
+      })
+      .catch(err => {
+        throw err
+      });
+    });
+  });
+
 });
