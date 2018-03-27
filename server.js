@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const fetchAndParse = require('./helper');
+const apiKey = require('./apiKey');
 
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'BYOB';
