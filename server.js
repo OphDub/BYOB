@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express();
-const fetchAndParse = require('./helper');
-const apiKey = require('./apiKey');
+const bodyParser = require('body-parser');
+
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
+app.use(bodyParser.json());
 app.locals.title = 'BYOB';
 
 app.get('/', (request, response) => {
