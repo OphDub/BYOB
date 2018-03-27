@@ -40,4 +40,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST /api/v1/police_district', () => {
+    it('add new police district', () => {
+      return chai.request(server)
+      .post('/api/v1/police_district')
+      .send({
+        //data
+      })
+      .then(response => {
+        response.should.have.status(201);
+        response.body.should.be.a('object');
+        //response.body.should.have.property(propertyname);
+        //response.body.propertyname.should.equal('');
+      })
+      .catch(err => {
+        throw err;
+      });
+    });
+  });
 });
