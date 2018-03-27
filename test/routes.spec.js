@@ -6,6 +6,7 @@ const server = require('../server');
 chai.use(chaiHttp);
 
 describe('API Routes', () => {
+
   describe('GET /api/v1/police_district', () => {
     it('return all of the police districts', () => {
       return chai.request(server)
@@ -22,4 +23,21 @@ describe('API Routes', () => {
       });
     });
   });
+  
+  describe('GET /api/v1/marijuana_incident/', () => {
+    it('return all of the incidents', () => {
+      return chai.request(server)
+      .get('/api/v1/marijuana_incident/')
+      .then(response => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        //test for all property keys and values of response.body[0]
+      })
+      .catch(err => {
+        throw err;
+      });
+    });
+  });
+
 });
