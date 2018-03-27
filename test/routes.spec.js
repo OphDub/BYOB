@@ -57,6 +57,21 @@ describe('API Routes', () => {
         throw err;
       });
     });
+
+    it('should not create a record with missing data', () => {
+      return chai.request(server)
+      .post('/api/v1/police_district')
+      .send({
+        //data
+      })
+      .then(response => {
+        response.should.have.status(422);
+        //response.body.error.should.equal(whatever we set response error to)
+      })
+      .catch(err => {
+        throw err
+      });
+    });
   });
 
   describe('POST /api/v1/marijuana_incident/', () => {
