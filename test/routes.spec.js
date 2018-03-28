@@ -90,7 +90,7 @@ describe('API Routes', () => {
     });
 
     describe('DELETE /api/v1/venues/:id/', () => {
-      it.only('should delete a venue when given the correct id', () => {
+      it('should delete a venue when given the correct id', () => {
         return chai.request(server)
         .delete('/api/v1/venues/1')
         .then(response => {
@@ -101,8 +101,15 @@ describe('API Routes', () => {
         });
       });
 
-      it('should return a 404 if no venue matches', () => {
-
+      it.only('should return a 404 if no venue matches', () => {
+        return chai.request(server)
+        .delete('/api/v1/venues/550')
+        .then(response => {
+          response.should.have.status(404);
+        })
+        .catch(error => {
+          throw error;
+        });
       });
     });
   });
