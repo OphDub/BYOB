@@ -41,20 +41,20 @@ describe('API Routes', () => {
         });
       });
 
-        it.only('return specific venue for id passed in', () => {
-          return chai.request(server)
-          .get('/api/v1/venues/1')
-          .then( response => {
-            response.should.have.status(200);
-            response.should.be.json;
-            response.body[0].should.have.property('name');
-            response.body[0].should.have.property('city');
-            response.body.length.should.equal(1);
-          })
-          .catch( err => {
-            throw err;
-          })
-        });
+      it('return specific venue for id passed in', () => {
+        return chai.request(server)
+        .get('/api/v1/venues/1')
+        .then( response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('city');
+          response.body.length.should.equal(1);
+        })
+        .catch( err => {
+          throw err;
+        })
+      });
       });
 
     describe('POST /api/v1/venues', () => {
@@ -88,7 +88,7 @@ describe('API Routes', () => {
           response.should.have.status(422);
           response.body.error.should.equal('Expected format: { name: <String> }. You\'re missing a "name" property.');
         })
-        .catch(err => {
+        .catch( err => {
           throw err;
         });
       });
@@ -96,7 +96,17 @@ describe('API Routes', () => {
 
     describe('PATCH /api/v1/venues/:id/', () => {
       it('should change a venue when given the correct id', () => {
-  
+        return chai.request(server)
+          .patch('/api/v1/venues/1')
+          .send({
+            city: 'Colorado Springs'
+          })
+          .then( response => {
+            response.should.have.status(200)
+          })
+          .catch( err => {
+            throw err;
+          })
       });
 
       it('should return a 404 if no venue matches', () => {
@@ -116,7 +126,7 @@ describe('API Routes', () => {
         });
       });
 
-      it('should return a 404 if no venue matches', () => {
+      it.skip('should return a 404 if no venue matches', () => {
         return chai.request(server)
         .delete('/api/v1/venues/550')
         .then(response => {

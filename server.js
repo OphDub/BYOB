@@ -58,7 +58,25 @@ app.get('/api/v1/venues/:id/', (request, response) => {
 });
 
 app.patch('/api/v1/venues/:id/', (request, response) => {
+  const { id } = request.params;
+  const venues = database('venues');
+  const { city, name } = request.body;
 
+  if(city) {
+    venues.where('id', id).update({ city })
+      .then(() => {
+        response.status(200).send('City sucessfully updated.');
+      })
+  } 
+
+  if(name) {
+    venues.where('id', id).update({ name })
+      .then(() => {
+        response.status(200).send('Venue name successfully updated');
+      }) 
+  }
+
+    
 });
 
 app.delete('/api/v1/venues/:id/', (request, response) => {
