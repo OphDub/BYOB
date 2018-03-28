@@ -28,19 +28,34 @@ describe('API Routes', () => {
       it('return all of the venues', () => {
         return chai.request(server)
         .get('/api/v1/venues')
-        .then(response => {
+        .then( response => {
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('array');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('city');
-          response.body.length.should.equal('1');
+          response.body.length.should.equal(2);
         })
-        .catch(err => {
+        .catch( err => {
           throw err;
         });
       });
-    });
+
+        it.only('return specific venue for id passed in', () => {
+          return chai.request(server)
+          .get('/api/v1/venues/1')
+          .then( response => {
+            response.should.have.status(200);
+            response.should.be.json;
+            response.body[0].should.have.property('name');
+            response.body[0].should.have.property('city');
+            response.body.length.should.equal(1);
+          })
+          .catch( err => {
+            throw err;
+          })
+        });
+      });
 
     describe('POST /api/v1/venues', () => {
       it('should add new venue when given the correct data', () => {
@@ -101,7 +116,7 @@ describe('API Routes', () => {
         });
       });
 
-      it.only('should return a 404 if no venue matches', () => {
+      it('should return a 404 if no venue matches', () => {
         return chai.request(server)
         .delete('/api/v1/venues/550')
         .then(response => {

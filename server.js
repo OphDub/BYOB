@@ -46,16 +46,19 @@ app.post('/api/v1/venues', (request, response) => {
 
 app.get('/api/v1/venues/:id/', (request, response) => {
   const { id } = request.params;
-  const venue = database('venues').find(message => message.id === id);
-  if (venue) { 
-    return response.status(200).json(venue);
-  } else {
-    return response.sendStatus(404);
-  }
+  const venues = database('venues');
+  
+  venues.where('id', id)
+    .then( venue => {
+      response.status(200).json(venue)
+    })
+    .catch( venue => {
+      response.status(404);
+    })
 });
 
 app.patch('/api/v1/venues/:id/', (request, response) => {
-  //query WHERE id matches venues PRIMARY_KEY id followed by UPDATE to record
+
 });
 
 app.delete('/api/v1/venues/:id/', (request, response) => {
