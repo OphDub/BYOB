@@ -24,11 +24,34 @@ app.get('/api/v1/venues', (request, response) => {
 });
 
 app.post('/api/v1/venues', (request, response) => {
-  
+  const venuesInfo = request.body;
+
+  for (let requiredParameter of ['name', 'city']) {
+    if (!venuesInfo[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: `Expected format: { name: <String> }. You're missing a "${requiredParameter}" property.` });
+    }
+  }
+
+  database('venues').insert(venuesInfo, 'id')
+  .then(venues => {
+    const { name, city } = venuesInfo;
+    response.status(201).json({ id: venues[0], name, city })
+  })
+  .catch(error => {
+    response.status(500).json({ error });
+  });
 });
 
 app.get('/api/v1/venues/:id/', (request, response) => {
-  //query WHERE id matches venues PRIMARY_KEY id
+  const { id } = request.params;
+  const venue = database('venues').find(message => message.id === id);
+  if (venue) { 
+    return response.status(200).json(venue);
+  } else {
+    return response.sendStatus(404);
+  }
 });
 
 app.patch('/api/v1/venues/:id/', (request, response) => {
@@ -36,7 +59,16 @@ app.patch('/api/v1/venues/:id/', (request, response) => {
 });
 
 app.delete('/api/v1/venues/:id/', (request, response) => {
-  //query WHERE id matches venues PRIMARY_KEY id followed by DELETE on record
+  const { id } = request.params;
+  const venue = database('venues').find(message => message.id === id);
+  
+  venue.delete()
+    .then(data => {
+      return response.status(204).json({ data });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    })
 })
 
 app.get('/api/v1/concerts/', (request, response) => {
@@ -63,3 +95,5 @@ app.delete('/api/v1/concerts/:id/', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
+
+module.exports = app;
