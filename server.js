@@ -81,13 +81,35 @@ app.get('/api/v1/concerts/', (request, response) => {
     });
 });
 
-app.post('/api/v1/concerts/', (request, response) => {
-  //INSERT with PRIMARY_KEY incident_id matching id
-  //Add conditional to check for incident_id, report_date, incident_address, district_id(foreign key), offense_type_id, offense code, neighborhood_id, mj_relation_type
-});
+app.post('/api/v1/concerts', (request, response) => {
+  const concertInfo = request.body;
+  const concertParams = ['artist', 'date', 'time', 'venue_id'];
 
-app.get('/api/v1/concerts/:id/', (request, response) => {
-  //query WHERE id matches concerts PRIMARY_KEY incident_id
+  for(let requiredParameter of concertParams) {
+    if(!concertInfo[requiredParameter]) {
+      return response
+        .status(422)
+        .send({
+          error: `Expected format: { artist: <string>, date: <string>, time: <string>, venue_id: <integer> }. You are missing a "${requiredParameter}" property.`
+        });
+    }
+  }
+
+  database('concerts').insert(concertInfo, 'id')
+    .then(concert => {
+      const { artist, date, time, venue_id } = concertInfo;
+
+      response.status(201).json({
+        id: concert[0],
+        artist,
+        date,
+        time,
+        venue_id
+      })
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
 });
 
 app.patch('/api/v1/concerts/:id/', (request, response) => {

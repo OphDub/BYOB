@@ -116,16 +116,67 @@ describe('API Routes', () => {
           response.body[1].should.have.property('venue_id');
           response.body[1].venue_id.should.equal(1);
         })
+        .catch(error => {
+          throw error
+        });
       });
     });
 
     describe('POST /api/v1/concerts', () => {
       it('should create a concert when given the correct data', () => {
+        const venueId = 1;
+        const newConcert = {
+          artist: 'Seven Lions',
+          date: '4/15/2018',
+          time: '8:00pm',
+          venue_id: venueId
+        };
 
+        return chai.request(server)
+        .post(`/api/v1/concerts`)
+        .send(newConcert)
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.should.be.an('object');
+          response.body.should.have.property('id');
+          response.body.id.should.equal(3);
+          response.body.should.have.property('artist');
+          response.body.artist.should.equal('Seven Lions');
+          response.body.should.have.property('date');
+          response.body.date.should.equal('4/15/2018');
+          response.body.should.have.property('time');
+          response.body.time.should.equal('8:00pm');
+          response.body.should.have.property('venue_id');
+          response.body.venue_id.should.equal(1);
+        })
+        .catch(error => {
+          throw error;
+        });
       });
 
       it('should not create a concert with missing data', () => {
+        const venueId = 1;
+        const incompleteConcert = {
+          artist: 'Seven Lions',
+          date: '4/17/2018',
+          venue_id: venueId
+        };
 
+        return chai.request(server)
+        .post(`/api/v1/concerts`)
+        .send(incompleteConcert)
+        .then(response => {
+          const missingParameter = 'time';
+
+          response.should.have.status(422);
+          response.body.error.should.equal(
+            `Expected format: { artist: <string>, date: <string>, time: <string>, venue_id: <integer> }. You are missing a "${missingParameter}" property.`
+          )
+        })
+        .catch(error => {
+          throw error;
+        })
       });
     });
 
