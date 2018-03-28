@@ -7,15 +7,17 @@ chai.use(chaiHttp);
 
 describe('API Routes', () => {
 
-  describe('GET /api/v1/police_district', () => {
-    it('return all of the police districts', () => {
+  describe('GET /api/v1/venues', () => {
+    it.only('return all of the venues', () => {
       return chai.request(server)
-      .get('/api/v1/police_district')
+      .get('/api/v1/venues')
       .then(response => {
         response.should.have.status(200);
         response.should.be.json;
         response.body.should.be.a('array');
-        //response.body[0].should.have.property(propertyname);
+        response.body[0].should.have.property('name');
+        //response.body[0].propertyname.should.equal('1');
+        response.body[0].should.have.property('city');
         //response.body[0].propertyname.should.equal('1');
       })
       .catch(err => {

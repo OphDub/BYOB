@@ -14,12 +14,17 @@ app.get('/', (request, response) => {
 });
 
 app.get('/api/v1/venues', (request, response) => {
-  //SELECT * all rows in venues table
+  database('venues').select()
+  .then(venues => {
+    response.status(200).json(venues);
+  })
+  .catch((error) => {
+    response.status(500).json({ error });
+  });
 });
 
 app.post('/api/v1/venues', (request, response) => {
-  //INSERT with PRIMARY_KEY id matching id
-  // Add conditional to check for id
+  
 });
 
 app.get('/api/v1/venues/:id/', (request, response) => {
