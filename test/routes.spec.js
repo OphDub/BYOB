@@ -7,15 +7,17 @@ chai.use(chaiHttp);
 
 describe('API Routes', () => {
 
-  describe('GET /api/v1/police_district', () => {
-    it('return all of the police districts', () => {
+  describe('GET /api/v1/venues', () => {
+    it('return all of the venues', () => {
       return chai.request(server)
-      .get('/api/v1/police_district')
+      .get('/api/v1/venues')
       .then(response => {
         response.should.have.status(200);
         response.should.be.json;
         response.body.should.be.a('array');
-        //response.body[0].should.have.property(propertyname);
+        response.body[0].should.have.property('name');
+        //response.body[0].propertyname.should.equal('1');
+        response.body[0].should.have.property('city');
         //response.body[0].propertyname.should.equal('1');
       })
       .catch(err => {
@@ -40,18 +42,21 @@ describe('API Routes', () => {
     });
   });
 
-  describe('POST /api/v1/police_district', () => {
-    it('add new police district', () => {
+  describe('POST /api/v1/venues', () => {
+    it.only('add new venue', () => {
       return chai.request(server)
-      .post('/api/v1/police_district')
+      .post('/api/v1/venues')
       .send({
-        //data
+        name: 'Sweet Venue',
+        city: 'Denvaaa'
       })
       .then(response => {
         response.should.have.status(201);
         response.body.should.be.a('object');
-        //response.body.should.have.property(propertyname);
-        //response.body.propertyname.should.equal('');
+        response.body.should.have.property('name');
+        response.body.name.should.equal('Sweet Venue');
+        response.body.should.have.property('city');
+        response.body.city.should.equal('Denvaaa');
       })
       .catch(err => {
         throw err;
