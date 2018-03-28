@@ -60,14 +60,18 @@ app.patch('/api/v1/venues/:id/', (request, response) => {
 
 app.delete('/api/v1/venues/:id/', (request, response) => {
   const { id } = request.params;
-  const venue = database('venues').find(message => message.id === id);
-  
-  venue.delete()
-    .then(data => {
-      return response.status(204).json({ data });
-    })
-    .catch(error => {
-      return response.status(500).json({ error });
+  const venue = database('venues');
+  const concerts = database('concerts');
+
+  concerts.where('venue_id', id).delete()
+    .then(() => {
+      venue.where('id', id).delete()
+      .then(data => {
+        return response.status(204).json({ data });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      }) 
     })
 })
 
