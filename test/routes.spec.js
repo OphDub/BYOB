@@ -35,7 +35,7 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('city');
-          response.body.length.should.equal('1');
+          response.body.length.should.equal(1);
         })
         .catch(err => {
           throw err;
