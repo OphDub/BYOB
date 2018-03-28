@@ -63,7 +63,7 @@ describe('API Routes', () => {
         });
       });
 
-      it.only('should not create a venue with missing data', () => {
+      it('should not create a venue with missing data', () => {
         return chai.request(server)
         .post('/api/v1/venues')
         .send({
@@ -81,7 +81,7 @@ describe('API Routes', () => {
 
     describe('PATCH /api/v1/venues/:id/', () => {
       it('should change a venue when given the correct id', () => {
-
+  
       });
 
       it('should return a 404 if no venue matches', () => {
@@ -90,8 +90,15 @@ describe('API Routes', () => {
     });
 
     describe('DELETE /api/v1/venues/:id/', () => {
-      it('should delete a venue when given the correct id', () => {
-
+      it.only('should delete a venue when given the correct id', () => {
+        return chai.request(server)
+        .delete('/api/v1/venues/1')
+        .then(response => {
+          response.should.have.status(204);
+        })
+        .catch(error => {
+          throw error;
+        });
       });
 
       it('should return a 404 if no venue matches', () => {
