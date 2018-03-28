@@ -34,12 +34,19 @@ exports.seed = function(knex, Promise) {
       return knex('venues').del();
     })
     .then(() => {
-      const venuesData = cleanData(tmData);
       let venuePromises = [];
-
-      venuesData.forEach(venue => {
-        venuePromises.push(createVenue(knex, venue));
-      });
+      const venue = { 
+        name: 'Red Rocks',
+        city: 'Denva Baby',
+        concerts: [{
+          artist: 'Kelly Clarkson',
+          date: 'Yesterday',
+          time: '3:00',
+          venue_id: 1
+        }]
+      }
+      venuePromises.push(createVenue(knex, venue));
+      
 
       return Promise.all(venuePromises);
     })
