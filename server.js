@@ -72,7 +72,13 @@ app.delete('/api/v1/venues/:id/', (request, response) => {
 })
 
 app.get('/api/v1/concerts/', (request, response) => {
-  //SELECT * all rows in concerts table
+  database('concerts').select()
+    .then((concerts) => {
+      response.status(200).json(concerts);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
 app.post('/api/v1/concerts/', (request, response) => {

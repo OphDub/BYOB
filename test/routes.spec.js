@@ -29,7 +29,6 @@ describe('API Routes', () => {
         return chai.request(server)
         .get('/api/v1/venues')
         .then(response => {
-          console.log(response.body)
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('array');
@@ -92,8 +91,31 @@ describe('API Routes', () => {
 
   describe('CONCERTS endpoints', () => {
     describe('GET /api/v1/concerts', () => {
-      it('return all of the concerts', () => {
-
+      it('should return all of the concerts', () => {
+        return chai.request(server)
+        .get('/api/v1/concerts')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(2);
+          response.body[0].should.have.property('artist');
+          response.body[0].artist.should.equal('Kelly Clarkson');
+          response.body[0].should.have.property('date');
+          response.body[0].date.should.equal('3/27/2018');
+          response.body[0].should.have.property('time');
+          response.body[0].time.should.equal('8:00pm');
+          response.body[0].should.have.property('venue_id');
+          response.body[0].venue_id.should.equal(1);
+          response.body[1].should.have.property('artist');
+          response.body[1].artist.should.equal('Lil Jon');
+          response.body[1].should.have.property('date');
+          response.body[1].date.should.equal('3/29/2018');
+          response.body[1].should.have.property('time');
+          response.body[1].time.should.equal('8:00pm');
+          response.body[1].should.have.property('venue_id');
+          response.body[1].venue_id.should.equal(1);
+        })
       });
     });
 
