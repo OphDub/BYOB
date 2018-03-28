@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 describe('API Routes', () => {
 
   describe('GET /api/v1/venues', () => {
-    it('return all of the venues', () => {
+    it.only('return all of the venues', () => {
       return chai.request(server)
       .get('/api/v1/venues')
       .then(response => {
