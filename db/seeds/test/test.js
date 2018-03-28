@@ -34,6 +34,25 @@ exports.seed = function(knex, Promise) {
       return knex('venues').del();
     })
     .then(() => {
+      // return Promise.all([
+      //   knex('venues').insert(
+      //     {
+      //       name: 'Red Rocks',
+      //       city: 'Denver'
+      //     }
+      //   )
+      // ], 'id')
+      //   .then(venue => {
+      //     return knex('concerts').insert({
+      //       artist: 'Kelly Clarksob',
+      //       date: 'Today',
+      //       time: '3:00',
+      //       venue_id: venue[0]
+      //     }, 'id')
+      //   })
+      //   .catch(err => {
+      //     console.log(`Error seeding data: ${err}`)
+      //   })
       let venuePromises = [];
       const venue = { 
         name: 'Red Rocks',
