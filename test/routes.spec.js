@@ -29,13 +29,12 @@ describe('API Routes', () => {
         return chai.request(server)
         .get('/api/v1/venues')
         .then(response => {
-          console.log(response.body)
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('array');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('city');
-          response.body.length.should.equal(1);
+          response.body.length.should.equal('1');
         })
         .catch(err => {
           throw err;
@@ -64,8 +63,19 @@ describe('API Routes', () => {
         });
       });
 
-      it('should not create a venue with missing data', () => {
-      
+      it.only('should not create a venue with missing data', () => {
+        return chai.request(server)
+        .post('/api/v1/venues')
+        .send({
+          city: 'Denver'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.body.error.should.equal('Expected format: { name: <String> }. You\'re missing a "name" property.');
+        })
+        .catch(err => {
+          throw err;
+        });
       });
     });
 
