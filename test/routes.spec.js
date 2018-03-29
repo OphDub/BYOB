@@ -23,6 +23,49 @@ describe('API Routes', () => {
     });
   });
 
+  describe('JWT Authentication endpoint', () => {
+    describe('POST /api/v1/authenticate', () => {
+      it('should return 422 when not given the correct parameters', () => {
+        const incompleteUserAppInfo = {
+          email: 'suh@dude.com'
+        };
+        const missingInfo = 'app_name';
+
+        return chai.request(server)
+        .post('/api/v1/authenticate')
+        .send(incompleteUserAppInfo)
+        .then( response => {
+          response.should.have.status(422);
+          response.body.error.should.equal(
+            `Expected format: { email: <string>, app_name: <string> }. You are missing a "${missingInfo}".`
+          )
+        })
+        .catch( error => {
+          throw error;
+        });
+      });
+
+      it('should return a token when given the correct parameters', () => {
+        const userAppInfo = {
+          email: 'suh@dude.com',
+          app_name: 'suhdude'
+        };
+
+        return chai.request(server)
+        .post('/api/v1/authenticate')
+        .send(userAppInfo)
+        .then( response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.should.be.a('object');
+        })
+        .catch( error => {
+          throw error;
+        });
+      });
+    });
+  });
+
   describe('VENUES endpoints', () => {
     describe('GET /api/v1/venues', () => {
       it('return all of the venues', () => {

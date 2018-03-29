@@ -1,17 +1,43 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const key = require('./secret-key');
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
+app.set('secret_key', key);
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.locals.title = 'BYOB';
 
 app.get('/', (request, response) => {
+});
+
+app.post('/api/v1/authenticate', (request, response) => {
+  const { email, app_name } = request.body;
+  const payload = { email, app_name };
+  const authParams = ['email', 'app_name'];
+
+  for(let requiredParameter of authParams) {
+    if(!payload[requiredParameter]) {
+      return response.status(422).send({
+        error: `Expected format: { email: <string>, app_name: <string> }. You are missing a "${requiredParameter}".`
+      })
+    }
+  }
+
+  jwt.sign(payload, 'secret_key', { expiresIn: '48 h', algorithm: 'HS256' },
+    (err, token) => {
+      response.status(201).json(token)
+      .catch( error => {
+        response.status(500).json({ error })
+      });
+    }
+  );
 });
 
 app.get('/api/v1/venues', (request, response) => {
