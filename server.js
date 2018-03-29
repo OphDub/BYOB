@@ -8,6 +8,7 @@ const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
+app.use(express.static('public'));
 app.locals.title = 'BYOB';
 
 app.get('/', (request, response) => {
@@ -72,16 +73,44 @@ app.delete('/api/v1/venues/:id/', (request, response) => {
 })
 
 app.get('/api/v1/concerts/', (request, response) => {
-  //SELECT * all rows in concerts table
+  database('concerts').select()
+    .then((concerts) => {
+      response.status(200).json(concerts);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
-app.post('/api/v1/concerts/', (request, response) => {
-  //INSERT with PRIMARY_KEY incident_id matching id
-  //Add conditional to check for incident_id, report_date, incident_address, district_id(foreign key), offense_type_id, offense code, neighborhood_id, mj_relation_type
-});
+app.post('/api/v1/concerts', (request, response) => {
+  const concertInfo = request.body;
+  const concertParams = ['artist', 'date', 'time', 'venue_id'];
 
-app.get('/api/v1/concerts/:id/', (request, response) => {
-  //query WHERE id matches concerts PRIMARY_KEY incident_id
+  for(let requiredParameter of concertParams) {
+    if(!concertInfo[requiredParameter]) {
+      return response
+        .status(422)
+        .send({
+          error: `Expected format: { artist: <string>, date: <string>, time: <string>, venue_id: <integer> }. You are missing a "${requiredParameter}" property.`
+        });
+    }
+  }
+
+  database('concerts').insert(concertInfo, 'id')
+    .then(concert => {
+      const { artist, date, time, venue_id } = concertInfo;
+
+      response.status(201).json({
+        id: concert[0],
+        artist,
+        date,
+        time,
+        venue_id
+      })
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
 });
 
 app.patch('/api/v1/concerts/:id/', (request, response) => {
@@ -89,7 +118,22 @@ app.patch('/api/v1/concerts/:id/', (request, response) => {
 });
 
 app.delete('/api/v1/concerts/:id/', (request, response) => {
-  //query WHERE id matches concerts PRIMARY_KEY incident_id followed by DELETE on record
+  const concertId  = request.params.id;
+  const concert = database('concerts').where('id', concertId);
+
+  concert.delete()
+    .then(concert => {
+      if (concert) {
+        response.status(204).json({ concert });
+      } else {
+        response.status(404).json({
+          error: `Could not find concert with id - ${concertId}.`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
 });
 
 app.listen(app.get('port'), () => {
