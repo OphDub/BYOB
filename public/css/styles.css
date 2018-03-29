@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 15px;
+}
+
+.ven-con-hdr {
+  padding: 0px;
+}
+
+main {
+  padding: 15px;
+}
