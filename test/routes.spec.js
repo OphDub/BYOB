@@ -192,11 +192,30 @@ describe('API Routes', () => {
 
     describe('DELETE /api/v1/concerts/:id/', () => {
       it('should delete a concert when given the correct id', () => {
+        const concertId = 1;
 
+        return chai.request(server)
+        .delete(`/api/v1/concerts/${concertId}`)
+        .then(response => {
+          response.status.should.equal(204);
+        })
+        .catch(error => {
+          throw error;
+        });
       });
 
       it('should return a 404 if no concert matches', () => {
+        const invalidConcertId = 50;
 
+        return chai.request(server)
+        .delete(`/api/v1/concerts/${invalidConcertId}`)
+        .then(response => {
+          response.status.should.equal(404);
+          response.body.error.should.equal(`Could not find concert with id - ${invalidConcertId}.`)
+        })
+        .catch(error => {
+          throw error;
+        });
       });
     });
   });

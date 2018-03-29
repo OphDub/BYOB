@@ -117,7 +117,22 @@ app.patch('/api/v1/concerts/:id/', (request, response) => {
 });
 
 app.delete('/api/v1/concerts/:id/', (request, response) => {
-  //query WHERE id matches concerts PRIMARY_KEY incident_id followed by DELETE on record
+  const concertId  = request.params.id;
+  const concert = database('concerts').where('id', concertId);
+
+  concert.delete()
+    .then(concert => {
+      if (concert) {
+        response.status(204).json({ concert });
+      } else {
+        response.status(404).json({
+          error: `Could not find concert with id - ${concertId}.`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
 });
 
 app.listen(app.get('port'), () => {
