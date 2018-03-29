@@ -5,10 +5,16 @@ exports.seed = function(knex, Promise) {
     })
     .then(() => {
       return Promise.all([
-        knex('venues').insert({
+        knex('venues').insert([
+          {
+            name: 'Pepsi Center',
+            city: 'Denver'
+          },
+          {
           name: "Red Rocks",
           city: "Denver"
-        }, 'id')
+          }
+        ], 'id')
         .then(venue => {
           return knex('concerts').insert([
             {

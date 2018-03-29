@@ -47,28 +47,53 @@ app.post('/api/v1/venues', (request, response) => {
 
 app.get('/api/v1/venues/:id/', (request, response) => {
   const { id } = request.params;
-  const venue = database('venues').find(message => message.id === id);
-  if (venue) { 
-    return response.status(200).json(venue);
-  } else {
-    return response.sendStatus(404);
-  }
+  const venues = database('venues');
+  
+  venues.where('id', id)
+    .then( venue => {
+      response.status(200).json(venue)
+    })
+    .catch( venue => {
+      response.status(404);
+    })
 });
 
 app.patch('/api/v1/venues/:id/', (request, response) => {
-  //query WHERE id matches venues PRIMARY_KEY id followed by UPDATE to record
+  const { id } = request.params;
+  const venues = database('venues');
+  const { city, name } = request.body;
+
+  if(city) {
+    venues.where('id', id).update({ city })
+      .then(() => {
+        response.status(200).send('City sucessfully updated.');
+      })
+  } 
+
+  if(name) {
+    venues.where('id', id).update({ name })
+      .then(() => {
+        response.status(200).send('Venue name successfully updated');
+      }) 
+  }
+
+    
 });
 
 app.delete('/api/v1/venues/:id/', (request, response) => {
   const { id } = request.params;
-  const venue = database('venues').find(message => message.id === id);
-  
-  venue.delete()
-    .then(data => {
-      return response.status(204).json({ data });
-    })
-    .catch(error => {
-      return response.status(500).json({ error });
+  const venue = database('venues');
+  const concerts = database('concerts');
+
+  concerts.where('venue_id', id).delete()
+    .then(() => {
+      venue.where('id', id).delete()
+      .then(data => {
+        return response.status(204).json({ data });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      }) 
     })
 })
 

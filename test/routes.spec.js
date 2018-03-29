@@ -28,19 +28,34 @@ describe('API Routes', () => {
       it('return all of the venues', () => {
         return chai.request(server)
         .get('/api/v1/venues')
-        .then(response => {
+        .then( response => {
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('array');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('city');
-          response.body.length.should.equal(1);
+          response.body.length.should.equal(2);
         })
-        .catch(err => {
+        .catch( err => {
           throw err;
         });
       });
-    });
+
+      it('return specific venue for id passed in', () => {
+        return chai.request(server)
+        .get('/api/v1/venues/1')
+        .then( response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('city');
+          response.body.length.should.equal(1);
+        })
+        .catch( err => {
+          throw err;
+        })
+      });
+      });
 
     describe('POST /api/v1/venues', () => {
       it('should add new venue when given the correct data', () => {
@@ -64,13 +79,34 @@ describe('API Routes', () => {
       });
 
       it('should not create a venue with missing data', () => {
-      
+        return chai.request(server)
+        .post('/api/v1/venues')
+        .send({
+          city: 'Denver'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.body.error.should.equal('Expected format: { name: <String> }. You\'re missing a "name" property.');
+        })
+        .catch( err => {
+          throw err;
+        });
       });
     });
 
     describe('PATCH /api/v1/venues/:id/', () => {
       it('should change a venue when given the correct id', () => {
-
+        return chai.request(server)
+          .patch('/api/v1/venues/1')
+          .send({
+            city: 'Colorado Springs'
+          })
+          .then( response => {
+            response.should.have.status(200)
+          })
+          .catch( err => {
+            throw err;
+          })
       });
 
       it('should return a 404 if no venue matches', () => {
@@ -80,11 +116,25 @@ describe('API Routes', () => {
 
     describe('DELETE /api/v1/venues/:id/', () => {
       it('should delete a venue when given the correct id', () => {
-
+        return chai.request(server)
+        .delete('/api/v1/venues/1')
+        .then(response => {
+          response.should.have.status(204);
+        })
+        .catch(error => {
+          throw error;
+        });
       });
 
-      it('should return a 404 if no venue matches', () => {
-
+      it.skip('should return a 404 if no venue matches', () => {
+        return chai.request(server)
+        .delete('/api/v1/venues/550')
+        .then(response => {
+          response.should.have.status(404);
+        })
+        .catch(error => {
+          throw error;
+        });
       });
     });
   });
