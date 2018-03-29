@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- node
+services:
+- postgresql
+before_script:
+- psql -c 'CREATE DATABASE venues_concerts;' -U postgres
+notifications:
+  email: false
+deploy:
+  provider: heroku
+  deploy:
+  api_key:
+    secure: copTV4yzmObpeTxhJnoUSkEc/Qf0DYXL0dWdpUsI5htefnh1eTK1a3WAsmnbW6dkXGABm5dqAsgoSpioreMXqRThpIXvlJtnT6uZD1L8U1z4Mk5/9uqxKqOZ2Ain1UuLVG/Hy4RffiL4sUwO4OLFWbY3n4uzmrVUH4BZm5urfKcN1B8IQFVSdbnvcHN0vTE7ycCYW0E6wSJ+nolTI5P2MzKYYedL8DjftpSev/dBqFLx6vcQYFgLcO0MelKgp6OWG6SszZrxDcc+m8qvMPxAmIPq3hW2nwD/u1su4MDRNR5KxXsfiXEPROyXwrBFmtROHBETc9zxrcWvpCcMo3geTq4VQ5ZWck0iKtA1KnZbP11f2qktDgHg9grmUAK6vswXNddjXqHM/5loWQBQVAnMlgxVHQJ1tbyrqcA1iCM1MB8xDxVYTwDL1FT2AiIaE/Nvy2O0ze88KGT7Y86BYiUX/RhhXLzECpiCYA217uzdrlEcmal27SEe/BmxgYnxlE23AYMkJfHPuRI1g1qUOEfv+8bj6uM54ZbNggypz46lTsA3tM6hLOvRYFZ2IbAi0aArZVXpICW4O9Ynyrx8C53Tjsumu4/+5vmOmBjWwDW3S5+FvwXNV+a7XLQgUyeWNubyVbWKqsGw+VvR4kHVvy2LtLCizxJqEheU2JTtT67Plh0=
+  app: ven-con
+  skip_cleanup: true
