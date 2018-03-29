@@ -98,7 +98,7 @@ describe('API Routes', () => {
           throw err;
         })
       });
-      });
+    });
 
     describe('POST /api/v1/venues', () => {
       it('should add new venue when given the correct data', () => {
@@ -169,7 +169,7 @@ describe('API Routes', () => {
         });
       });
 
-      it.skip('should return a 404 if no venue matches', () => {
+      it('should return a 404 if no venue matches', () => {
         return chai.request(server)
         .delete('/api/v1/venues/550')
         .then(response => {
