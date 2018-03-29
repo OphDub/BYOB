@@ -4,6 +4,24 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const key = require('./secret-key');
 
+const checkAuth = (request, response, next) => {
+  const { token } = request.body;
+
+  if (token) {
+    const decoded = jwt.verify(token, 'secret_key', {algorithm: 'HSA256'});
+
+    if(decoded.email.includes('@turing.io')) {
+      next();
+    } else {
+      response.status(403).send({
+        error: `Not authorized`
+      });
+    }
+  } else if (!token) {
+    response.status(403).send({ error: `You must be authorized to hit this endpoint.`});
+  }
+};
+
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
@@ -74,7 +92,7 @@ app.post('/api/v1/venues', (request, response) => {
 app.get('/api/v1/venues/:id/', (request, response) => {
   const { id } = request.params;
   const venues = database('venues');
-  
+
   venues.where('id', id)
     .then( venue => {
       response.status(200).json(venue)
@@ -94,16 +112,14 @@ app.patch('/api/v1/venues/:id/', (request, response) => {
       .then(() => {
         response.status(200).send('City sucessfully updated.');
       })
-  } 
+  }
 
   if(name) {
     venues.where('id', id).update({ name })
       .then(() => {
         response.status(200).send('Venue name successfully updated');
-      }) 
+      })
   }
-
-    
 });
 
 app.delete('/api/v1/venues/:id/', (request, response) => {
@@ -119,7 +135,7 @@ app.delete('/api/v1/venues/:id/', (request, response) => {
       })
       .catch(error => {
         return response.status(500).json({ error });
-      }) 
+      })
     })
 })
 
