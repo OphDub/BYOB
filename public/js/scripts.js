@@ -14,9 +14,12 @@ const submitApiAccessInfo = async (event) => {
     return;
   }
 
-  const userInfo = Object.assign({ user_email: email, app_name: appName });
+  const userInfo = Object.assign({ email: email, app_name: appName });
   const userToken = await getUserToken(userInfo);
-  const userTokenInfo = `<h3>Your token info is as follows: ${userToken} </h3>`
+  const userTokenInfo = `
+    <h3>Your token info is as follows:</h3>
+    <p>${userToken}</p>
+  `
 
   infoContainer.append(userTokenInfo);
 };
