@@ -8,6 +8,7 @@ const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
+app.use(express.static('public'));
 app.locals.title = 'BYOB';
 
 app.get('/', (request, response) => {
