@@ -182,7 +182,10 @@ describe('API Routes', () => {
       });
 
       it('should return a 404 if no venue matches', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+        set('authorization', validToken)
         .delete('/api/v1/venues/550')
         .then(response => {
           response.should.have.status(404);
