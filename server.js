@@ -185,7 +185,7 @@ app.patch('/api/v1/concerts/:id/', (request, response) => {
   //query WHERE id matches concerts PRIMARY_KEY incident_id followed by UPDATE to record
 });
 
-app.delete('/api/v1/concerts/:id/', (request, response) => {
+app.delete('/api/v1/concerts/:id/', checkAuth, (request, response) => {
   const concertId  = request.params.id;
   const concert = database('concerts').where('id', concertId);
 

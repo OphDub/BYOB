@@ -294,8 +294,10 @@ describe('API Routes', () => {
     describe('DELETE /api/v1/concerts/:id/', () => {
       it('should delete a concert when given the correct id', () => {
         const concertId = 1;
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
 
         return chai.request(server)
+        set('authorization', validToken)
         .delete(`/api/v1/concerts/${concertId}`)
         .then(response => {
           response.status.should.equal(204);
@@ -307,8 +309,10 @@ describe('API Routes', () => {
 
       it('should return a 404 if no concert matches', () => {
         const invalidConcertId = 50;
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
 
         return chai.request(server)
+        set('authorization', validToken)
         .delete(`/api/v1/concerts/${invalidConcertId}`)
         .then(response => {
           response.status.should.equal(404);
