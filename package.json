@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha --exit",
-    "eslint": "./node_modules/.bin/eslint ./server.js ./helper.js ./test/routes.spec.js ./db/seeds/dev/venues.js ./db/seeds/test/test.js" 
+    "eslint": "./node_modules/.bin/eslint ./server.js ./helper.js ./test/routes.spec.js ./db/seeds/dev/venues.js ./db/seeds/test/test.js ./public/*/*.js" 
   },
   "keywords": [],
   "author": "",

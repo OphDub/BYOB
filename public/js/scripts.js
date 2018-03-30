@@ -8,7 +8,7 @@ const submitApiAccessInfo = async (event) => {
 
   infoContainer.empty();
 
-  if(email === '' || appName === '') {
+  if (email === '' || appName === '') {
     const errorMsg = `<h3>You must provide an email and an app name.</h3>`;
     infoContainer.append(errorMsg);
     return;
@@ -19,7 +19,7 @@ const submitApiAccessInfo = async (event) => {
   const userTokenInfo = `
     <h3>Your token info is as follows:</h3>
     <p>${userToken}</p>
-  `
+  `;
 
   infoContainer.append(userTokenInfo);
 };
