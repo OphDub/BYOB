@@ -102,7 +102,7 @@ app.get('/api/v1/venues/:id/', (request, response) => {
     })
 });
 
-app.patch('/api/v1/venues/:id/', (request, response) => {
+app.patch('/api/v1/venues/:id/', checkAuth, (request, response) => {
   const { id } = request.params;
   const venues = database('venues');
   const { city, name } = request.body;
