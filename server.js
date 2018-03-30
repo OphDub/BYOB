@@ -40,8 +40,7 @@ app.post('/api/v1/authenticate', (request, response) => {
   for (let requiredParameter of authParams) {
     if (!payload[requiredParameter]) {
       return response.status(422).send({
-        error: `Expected format: { email: <string>, app_name: <string> }.
-           You are missing a "${requiredParameter}".`
+        error: `Expected format: { email: <string>, app_name: <string> }. You are missing a "${requiredParameter}".`
       });
     }
   }
@@ -158,12 +157,7 @@ app.post('/api/v1/concerts', checkAuth, (request, response) => {
       return response
         .status(422)
         .send({
-          error: `Expected format: { 
-            artist: <string>, 
-            date: <string>, 
-            time: <string>, 
-            venue_id: <integer> 
-          }. You are missing a "${requiredParameter}" property.`
+          error: `Expected format: { artist: <string>, date: <string>, time: <string>, venue_id: <number> }. You are missing a "${requiredParameter}" property.`
         });
     }
   }
