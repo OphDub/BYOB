@@ -298,11 +298,21 @@ describe('API Routes', () => {
 
     describe('PATCH /api/v1/concerts/:id/', () => {
       it('should change a concert when given the correct id', () => {
-
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
       });
 
       it('should return a 404 if no concert matches', () => {
+        const invalidConcertId = 25;
 
+        return chai.request(server)
+        .patch(`/api/v1/concerts/${invalidConcertId}/`)
+        .then( response => {
+          response.status.should.equal(404);
+          response.body.error.should.equal(`Could not find concert with id - ${invalidConcertId}.`)
+        })
+        .catch( error => {
+          throw error;
+        });
       });
     });
 
