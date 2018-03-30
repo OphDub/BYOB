@@ -218,16 +218,20 @@ describe('API Routes', () => {
     describe('POST /api/v1/concerts', () => {
       it('should create a concert when given the correct data', () => {
         const venueId = 1;
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`
         const newConcert = {
           artist: 'Seven Lions',
           date: '4/15/2018',
           time: '8:00pm',
-          venue_id: venueId
+          venue_id: venueId,
         };
 
         return chai.request(server)
         .post(`/api/v1/concerts`)
-        .send(newConcert)
+        .set('authorization', validToken)
+        .send({
+          concert: newConcert
+        })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -250,6 +254,7 @@ describe('API Routes', () => {
 
       it('should not create a concert with missing data', () => {
         const venueId = 1;
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
         const incompleteConcert = {
           artist: 'Seven Lions',
           date: '4/17/2018',
@@ -258,7 +263,10 @@ describe('API Routes', () => {
 
         return chai.request(server)
         .post(`/api/v1/concerts`)
-        .send(incompleteConcert)
+        .set('authorization', validToken)
+        .send({
+          concert:incompleteConcert
+        })
         .then(response => {
           const missingParameter = 'time';
 
