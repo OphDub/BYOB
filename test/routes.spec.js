@@ -125,7 +125,10 @@ describe('API Routes', () => {
       });
 
       it('should not create a venue with missing data', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+        set('authorization', validToken)
         .post('/api/v1/venues')
         .send({
           city: 'Denver'
