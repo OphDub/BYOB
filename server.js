@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const key = require('./secret-key');
 
 const checkAuth = (request, response, next) => {
-  const { token } = request.body;
+  const token = request.headers.authorization;
 
   if (token) {
     const decoded = jwt.verify(token, 'secret_key', {algorithm: 'HSA256'});
@@ -13,12 +13,12 @@ const checkAuth = (request, response, next) => {
     if(decoded.email.includes('@turing.io')) {
       next();
     } else {
-      response.status(403).send({
+      return response.status(403).send({
         error: `Not authorized`
       });
     }
   } else if (!token) {
-    response.status(403).send({ error: `You must be authorized to hit this endpoint.`});
+    return response.status(403).send({ error: `You must be authorized to hit this endpoint.`});
   }
 };
 
@@ -36,6 +36,8 @@ app.get('/', (request, response) => {
 });
 
 app.post('/api/v1/authenticate', (request, response) => {
+  console.log(request.body);
+  
   const { email, app_name } = request.body;
   const payload = { email, app_name };
   const authParams = ['email', 'app_name'];
@@ -149,8 +151,9 @@ app.get('/api/v1/concerts/', (request, response) => {
     });
 });
 
-app.post('/api/v1/concerts', (request, response) => {
-  const concertInfo = request.body;
+app.post('/api/v1/concerts', checkAuth, (request, response) => {
+  const concertInfo = request.body.concert;
+
   const concertParams = ['artist', 'date', 'time', 'venue_id'];
 
   for(let requiredParameter of concertParams) {
