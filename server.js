@@ -4,6 +4,24 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const key = require('./secret-key');
 
+const checkAuth = (request, response, next) => {
+  const token = request.headers.authorization;
+
+  if (token) {
+    const decoded = jwt.verify(token, 'secret_key', {algorithm: 'HSA256'});
+
+    if(decoded.email.includes('@turing.io')) {
+      next();
+    } else {
+      return response.status(403).send({
+        error: `Not authorized`
+      });
+    }
+  } else if (!token) {
+    return response.status(403).send({ error: `You must be authorized to hit this endpoint.`});
+  }
+};
+
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
@@ -18,6 +36,8 @@ app.get('/', (request, response) => {
 });
 
 app.post('/api/v1/authenticate', (request, response) => {
+  console.log(request.body);
+  
   const { email, app_name } = request.body;
   const payload = { email, app_name };
   const authParams = ['email', 'app_name'];
@@ -74,7 +94,7 @@ app.post('/api/v1/venues', (request, response) => {
 app.get('/api/v1/venues/:id/', (request, response) => {
   const { id } = request.params;
   const venues = database('venues');
-  
+
   venues.where('id', id)
     .then( venue => {
       response.status(200).json(venue)
@@ -94,16 +114,14 @@ app.patch('/api/v1/venues/:id/', (request, response) => {
       .then(() => {
         response.status(200).send('City sucessfully updated.');
       })
-  } 
+  }
 
   if(name) {
     venues.where('id', id).update({ name })
       .then(() => {
         response.status(200).send('Venue name successfully updated');
-      }) 
+      })
   }
-
-    
 });
 
 app.delete('/api/v1/venues/:id/', (request, response) => {
@@ -119,7 +137,7 @@ app.delete('/api/v1/venues/:id/', (request, response) => {
       })
       .catch(error => {
         return response.status(500).json({ error });
-      }) 
+      })
     })
 })
 
@@ -133,8 +151,9 @@ app.get('/api/v1/concerts/', (request, response) => {
     });
 });
 
-app.post('/api/v1/concerts', (request, response) => {
-  const concertInfo = request.body;
+app.post('/api/v1/concerts', checkAuth, (request, response) => {
+  const concertInfo = request.body.concert;
+
   const concertParams = ['artist', 'date', 'time', 'venue_id'];
 
   for(let requiredParameter of concertParams) {
