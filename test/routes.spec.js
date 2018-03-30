@@ -37,8 +37,7 @@ describe('API Routes', () => {
           .then( response => {
             response.should.have.status(422);
             response.body.error.should.equal(
-              `Expected format: { email: <string>, app_name: <string> }.
-              You are missing a "${missingInfo}".`
+              `Expected format: { email: <string>, app_name: <string> }. You are missing a "${missingInfo}".`
             );
           })
           .catch( error => {
@@ -288,7 +287,7 @@ describe('API Routes', () => {
 
             response.should.have.status(422);
             response.body.error.should.equal(
-              `Expected format: { artist: <string>, date: <string>, time: <string>, venue_id: <integer> }. You are missing a "${missingParameter}" property.`
+              `Expected format: { artist: <string>, date: <string>, time: <string>, venue_id: <number> }. You are missing a "${missingParameter}" property.`
             );
           })
           .catch( error => {
