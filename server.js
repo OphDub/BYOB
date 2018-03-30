@@ -36,8 +36,6 @@ app.get('/', (request, response) => {
 });
 
 app.post('/api/v1/authenticate', (request, response) => {
-  console.log(request.body);
-  
   const { email, app_name } = request.body;
   const payload = { email, app_name };
   const authParams = ['email', 'app_name'];
@@ -187,7 +185,7 @@ app.patch('/api/v1/concerts/:id/', (request, response) => {
   //query WHERE id matches concerts PRIMARY_KEY incident_id followed by UPDATE to record
 });
 
-app.delete('/api/v1/concerts/:id/', (request, response) => {
+app.delete('/api/v1/concerts/:id/', checkAuth, (request, response) => {
   const concertId  = request.params.id;
   const concert = database('concerts').where('id', concertId);
 
