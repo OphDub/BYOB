@@ -6,22 +6,22 @@ const createVenue = (knex, venue) => {
     name: venue.name,
     city: venue.city
   }, 'id')
-  .then(venueId => {
-    let concertPromises = [];
+    .then(venueId => {
+      let concertPromises = [];
 
-    venue.concerts.forEach(concert => {
-      concertPromises.push(
-        createConcert(knex, {
-          artist: concert.artist,
-          date: concert.date,
-          time: concert.time,
-          venue_id: venueId[0]
-        })
-      )
+      venue.concerts.forEach(concert => {
+        concertPromises.push(
+          createConcert(knex, {
+            artist: concert.artist,
+            date: concert.date,
+            time: concert.time,
+            venue_id: venueId[0]
+          })
+        );
+      });
+
+      return Promise.all(concertPromises);
     });
-
-    return Promise.all(concertPromises);
-  })
 };
 
 const createConcert = (knex, concert) => {
