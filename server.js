@@ -35,7 +35,7 @@ app.locals.title = 'BYOB';
 app.get('/', (request, response) => {
 });
 
-app.post('/api/v1/authenticate', (request, response) => {
+app.post('/api/v1/authenticate', checkAuth, (request, response) => {
   const { email, app_name } = request.body;
   const payload = { email, app_name };
   const authParams = ['email', 'app_name'];
