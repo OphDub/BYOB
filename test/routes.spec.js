@@ -165,7 +165,10 @@ describe('API Routes', () => {
 
     describe('DELETE /api/v1/venues/:id/', () => {
       it('should delete a venue when given the correct id', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+        set('authorization', validToken)
         .delete('/api/v1/venues/1')
         .then(response => {
           response.should.have.status(204);
