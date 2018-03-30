@@ -180,22 +180,7 @@ app.post('/api/v1/concerts', checkAuth, (request, response) => {
 });
 
 app.patch('/api/v1/concerts/:id/', (request, response) => {
-  const concertId = request.params.id;
-  const { artist, date, time, venue_id } = request.body.concert;
-  const concert = database('concerts').where('id', concertId);
-
-  concert.select('id').then( concert => {
-    if (id) {
-
-    } else {
-      response.status(404).json({
-        error: `Could not find concert with id - ${concertId}.`
-      });
-    }
-  })
-  .catch( error => {
-    response.status(500).json({ error });
-  })
+  //query WHERE id matches concerts PRIMARY_KEY incident_id followed by UPDATE to record
 });
 
 app.delete('/api/v1/concerts/:id/', checkAuth, (request, response) => {
