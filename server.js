@@ -36,8 +36,6 @@ app.get('/', (request, response) => {
 });
 
 app.post('/api/v1/authenticate', (request, response) => {
-  console.log(request.body);
-  
   const { email, app_name } = request.body;
   const payload = { email, app_name };
   const authParams = ['email', 'app_name'];
