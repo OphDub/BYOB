@@ -5,8 +5,8 @@ const cleanData = (data) => {
     return {
       artist: event.name,
       date: event.dates.start.localDate,
-      time: event.dates.start.localTime,
-    }
+      time: event.dates.start.localTime
+    };
   });
 
   const venuesArr = events.map(event => {
@@ -14,12 +14,10 @@ const cleanData = (data) => {
       name: event._embedded.venues[0].name,
       city: event._embedded.venues[0].city.name,
       concerts: concertsArr
-    }
+    };
   });
 
-  const pants = Array.from(new Set(venuesArr));
-
-  return pants
+  return Array.from(new Set(venuesArr));
 };
 
 module.exports = cleanData;
