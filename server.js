@@ -68,7 +68,7 @@ app.get('/api/v1/venues', (request, response) => {
   });
 });
 
-app.post('/api/v1/venues', (request, response) => {
+app.post('/api/v1/venues', checkAuth,(request, response) => {
   const venuesInfo = request.body;
 
   for (let requiredParameter of ['name', 'city']) {
@@ -102,7 +102,7 @@ app.get('/api/v1/venues/:id/', (request, response) => {
     })
 });
 
-app.patch('/api/v1/venues/:id/', (request, response) => {
+app.patch('/api/v1/venues/:id/', checkAuth, (request, response) => {
   const { id } = request.params;
   const venues = database('venues');
   const { city, name } = request.body;
@@ -122,7 +122,7 @@ app.patch('/api/v1/venues/:id/', (request, response) => {
   }
 });
 
-app.delete('/api/v1/venues/:id/', (request, response) => {
+app.delete('/api/v1/venues/:id/', checkAuth, (request, response) => {
   const { id } = request.params;
   const venue = database('venues');
   const concerts = database('concerts');

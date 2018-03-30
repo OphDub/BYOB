@@ -102,7 +102,10 @@ describe('API Routes', () => {
 
     describe('POST /api/v1/venues', () => {
       it('should add new venue when given the correct data', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+        set('authorization', validToken)
         .post('/api/v1/venues')
         .send({
           name: 'Sweet Venue',
@@ -122,7 +125,10 @@ describe('API Routes', () => {
       });
 
       it('should not create a venue with missing data', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+        set('authorization', validToken)
         .post('/api/v1/venues')
         .send({
           city: 'Denver'
@@ -139,7 +145,10 @@ describe('API Routes', () => {
 
     describe('PATCH /api/v1/venues/:id/', () => {
       it('should change a venue when given the correct id', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+          set('authorization', validToken)
           .patch('/api/v1/venues/1')
           .send({
             city: 'Colorado Springs'
@@ -159,7 +168,10 @@ describe('API Routes', () => {
 
     describe('DELETE /api/v1/venues/:id/', () => {
       it('should delete a venue when given the correct id', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+        set('authorization', validToken)
         .delete('/api/v1/venues/1')
         .then(response => {
           response.should.have.status(204);
@@ -169,8 +181,11 @@ describe('API Routes', () => {
         });
       });
 
-      it.skip('should return a 404 if no venue matches', () => {
+      it('should return a 404 if no venue matches', () => {
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+
         return chai.request(server)
+        set('authorization', validToken)
         .delete('/api/v1/venues/550')
         .then(response => {
           response.should.have.status(404);
