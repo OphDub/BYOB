@@ -233,7 +233,7 @@ describe('API Routes', () => {
     describe('POST /api/v1/concerts', () => {
       it('should create a concert when given the correct data', () => {
         const venueId = 1;
-        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyNjUzNTQyLCJleHAiOjE1MjI4MjYzNDJ9.Phvf3tiG66vVu_mpKby_AjqNLMYICSvFffPr7v52Za8`;
         const newConcert = {
           artist: 'Seven Lions',
           date: '4/15/2018',
@@ -269,7 +269,7 @@ describe('API Routes', () => {
 
       it('should not create a concert with missing data', () => {
         const venueId = 1;
-        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyMzc5Mzc2LCJleHAiOjE1MjI1NTIxNzZ9.gY0PRkV6-mICZho55RGIMzhcWZBGDZJdI9szOgoC_AE`;
+        const validToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvYmJpZUB0dXJpbmcuaW8iLCJhcHBfbmFtZSI6ImFtYXppbmcgYXBwIiwiaWF0IjoxNTIyNjUzNTQyLCJleHAiOjE1MjI4MjYzNDJ9.Phvf3tiG66vVu_mpKby_AjqNLMYICSvFffPr7v52Za8`;
         const incompleteConcert = {
           artist: 'Seven Lions',
           date: '4/17/2018',
@@ -298,11 +298,42 @@ describe('API Routes', () => {
 
     describe('PATCH /api/v1/concerts/:id/', () => {
       it('should change a concert when given the correct id', () => {
+        const validConcertId = 2;
+        const updatedConcert = {
+          artist: 'Drake',
+          date: '4/20/2018',
+          time: '8:00pm',
+          venue_id: '2'
+        }
 
+        return chai.request(server)
+        .patch(`/api/v1/concerts/${validConcertId}`)
+        .send({concert: updatedConcert})
+        .then( response => {
+          response.status.should.equal(202);
+          response.body.should.equal('Concert successfully edited.')
+        })
       });
 
       it('should return a 404 if no concert matches', () => {
+        const invalidConcertId = 25;
+        const updatedConcert = {
+          artist: 'J Cole',
+          date: '4/19/2018',
+          time: '8:00pm',
+          venue_id: '2'
+        }
 
+        return chai.request(server)
+        .patch(`/api/v1/concerts/${invalidConcertId}/`)
+        .send({concert: updatedConcert})
+        .then( response => {
+          response.status.should.equal(404);
+          response.body.error.should.equal(`Could not find concert with id - ${invalidConcertId}.`)
+        })
+        .catch( error => {
+          throw error;
+        });
       });
     });
 
