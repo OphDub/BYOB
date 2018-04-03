@@ -12,12 +12,14 @@ To run this repo, clone it down, run ```npm install```, and ```npm start```
 
 Response:
 ```
+[{ artist: "Kelly Clarkson" , date: "4/19/2018", time: "8:00pm" , venue_id: 1 }, { artist: "Lil Jon" , date: "4/23/2018", time: "8:00pm", venue_id: 1 }]
 ```
 
 #### ```GET /api/v1/concerts/:id```
 
 Response: 
 ```
+{ artist: "Kelly Clarkson" , date: "4/19/2018", time: "8:00pm" , venue_id: 1 }
 ```
 
 #### ```POST api/v1/concerts```
@@ -30,6 +32,7 @@ Response:
 
 Response: 
 ```
+{ artist: "Kelly Clarkson" , date: "4/19/2018", time: "8:00pm" , venue_id: 1 }
 ```
 
 #### ```PATCH api/v1/concerts/:id```
@@ -42,6 +45,7 @@ Response:
 
 Response
 ```
+'Concert successfully edited.'
 ```
 
 #### ```DELETE api/v1/concerts/:id```
@@ -65,7 +69,7 @@ Response:
 
 Response:
 ```
-
+[{ name: "Red Rocks", city: "Denver" }, { name: "Pepsi Center", city: "Denver" }]
 ```
 
 #### ```POST api/v1/venues```
@@ -76,7 +80,6 @@ Response:
 
 Response: 
 ```
-
 ```
 
 #### ```PATCH api/v1/venues/:id```
@@ -87,7 +90,6 @@ Response:
 
 Response
 ```
-
 ```
 
 
@@ -99,5 +101,4 @@ Response
 
 Response: 
 ```
-
 ```
