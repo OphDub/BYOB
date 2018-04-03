@@ -304,15 +304,15 @@ describe('API Routes', () => {
           date: '4/20/2018',
           time: '8:00pm',
           venue_id: '2'
-        }
+        };
 
         return chai.request(server)
-        .patch(`/api/v1/concerts/${validConcertId}`)
-        .send({concert: updatedConcert})
-        .then( response => {
-          response.status.should.equal(202);
-          response.body.should.equal('Concert successfully edited.')
-        })
+          .patch(`/api/v1/concerts/${validConcertId}`)
+          .send({concert: updatedConcert})
+          .then( response => {
+            response.status.should.equal(202);
+            response.body.should.equal('Concert successfully edited.');
+          });
       });
 
       it('should return a 404 if no concert matches', () => {
@@ -322,18 +322,18 @@ describe('API Routes', () => {
           date: '4/19/2018',
           time: '8:00pm',
           venue_id: '2'
-        }
+        };
 
         return chai.request(server)
-        .patch(`/api/v1/concerts/${invalidConcertId}/`)
-        .send({concert: updatedConcert})
-        .then( response => {
-          response.status.should.equal(404);
-          response.body.error.should.equal(`Could not find concert with id - ${invalidConcertId}.`)
-        })
-        .catch( error => {
-          throw error;
-        });
+          .patch(`/api/v1/concerts/${invalidConcertId}/`)
+          .send({concert: updatedConcert})
+          .then( response => {
+            response.status.should.equal(404);
+            response.body.error.should.equal(`Could not find concert with id - ${invalidConcertId}.`);
+          })
+          .catch( error => {
+            throw error;
+          });
       });
     });
 

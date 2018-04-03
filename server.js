@@ -181,20 +181,20 @@ app.post('/api/v1/concerts', checkAuth, (request, response) => {
 app.patch('/api/v1/concerts/:id/', (request, response) => {
   const concertId = request.params.id;
   const { artist, date, time, venue_id } = request.body.concert;
-  const concertInfo = { artist, date, time, venue_id }
+  const concertInfo = { artist, date, time, venue_id };
 
   database('concerts').where('id', concertId)
-  .update({ ...concertInfo})
-  .then(edited => {
-    if (edited) {
-      return response.status(202).json(`Concert successfully edited.`);
-    } else {
-      return response.status(404).json({error: `Could not find concert with id - ${concertId}.`});
-    }
-  })
-  .catch(error => {
-    return response.status(500).json({ error });
-  });
+    .update({ ...concertInfo})
+    .then(edited => {
+      if (edited) {
+        return response.status(202).json(`Concert successfully edited.`);
+      } else {
+        return response.status(404).json({error: `Could not find concert with id - ${concertId}.`});
+      }
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
 });
 
 app.delete('/api/v1/concerts/:id/', checkAuth, (request, response) => {
